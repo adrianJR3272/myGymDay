@@ -1,0 +1,7 @@
+{
+  "name": "myGymDay",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

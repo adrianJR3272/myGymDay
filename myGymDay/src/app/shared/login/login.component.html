@@ -1,0 +1,74 @@
+<div class="login-container">
+  @if(!registerModeSignal()){
+  <h2>Iniciar sesión</h2>
+  } @else {
+  <h2>Regístrate</h2>
+  }
+
+  <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="Email"
+      />
+      <mat-error
+        *ngIf="
+          loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+        "
+      >
+        Email inválido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+      <mat-error
+        *ngIf="
+          loginForm.get('password')?.invalid &&
+          loginForm.get('password')?.touched
+        "
+      >
+        La contraseña debe tener al menos 6 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    @if(!registerModeSignal()){
+    <div class="buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loginForm.invalid"
+        (click)="login()"
+      >
+        Iniciar sesión
+      </button>
+    </div>
+
+    <a (click)="registerMode()"
+      >¿Aún no te has registrado? Regístrate haciendo click
+    </a>
+    } @else {
+    <div class="buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loginForm.invalid"
+        (click)="register()"
+      >
+        Registrarse
+      </button>
+    </div>
+    }
+  </form>
+</div>
