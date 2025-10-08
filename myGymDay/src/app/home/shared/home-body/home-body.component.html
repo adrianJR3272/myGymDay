@@ -1,1 +1,21 @@
-<div class="home-body-component">dsads</div>
+<div class="home-body-component">
+  <div class="userName">Hola {{ userProfile?.nombre }}</div>
+  <div class="buttons">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="goToRegisterDay()"
+    >
+      Registrar entrenamiento
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="goToRegisters()"
+    >
+      Ver registros
+    </button>
+  </div>
+</div>

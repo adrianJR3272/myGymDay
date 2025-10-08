@@ -1,0 +1,55 @@
+<div class="record-training">
+  <form [formGroup]="trainingForm" (ngSubmit)="registerTraining()">
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de entrenamiento</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="fecha"
+        placeholder="Selecciona una fecha"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div formArrayName="musculos">
+      <div
+        *ngFor="let musculo of musculos.controls; let i = index"
+        class="musculo-row"
+      >
+        <mat-form-field appearance="fill" class="musculo-select">
+          <mat-label>Músculo {{ i + 1 }}</mat-label>
+          <mat-select [formControlName]="i">
+            <mat-option *ngFor="let m of musculosDisponibles" [value]="m">
+              {{ m.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-icon-button
+          color="warn"
+          *ngIf="musculos.length > 1"
+          (click)="eliminarMusculo(i)"
+          type="button"
+          aria-label="Eliminar músculo"
+          class="delete-button"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div class="error" *ngIf="musculos.errors?.['musculosDuplicados']">
+        ⚠️ No puedes repetir el mismo músculo.
+      </div>
+    </div>
+
+    <button mat-button type="button" (click)="agregarMusculo()">
+      <mat-icon>add</mat-icon> Añadir músculo
+    </button>
+
+    <button mat-raised-button color="primary" type="submit">
+      Registrar entrenamiento
+    </button>
+  </form>
+</div>

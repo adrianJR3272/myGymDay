@@ -1,0 +1,31 @@
+.record-training {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.musculo-row {
+  display: flex;
+  align-items: center;
+}
+
+.musculo-select {
+  flex: 1;
+}
+
+.delete-button {
+  height: 48px; 
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px; 
+  padding-bottom: 1.8rem;
+  color: #B80000
+}
+
+.error{
+    color: #B80000
+
+}
