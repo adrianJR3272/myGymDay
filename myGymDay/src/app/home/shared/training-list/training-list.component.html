@@ -1,4 +1,5 @@
 <app-training-header></app-training-header>
+
 <div class="training-container">
   <h2 class="mat-headline-5 mb-4 text-center">📅 Lista de entrenamientos</h2>
 
@@ -8,7 +9,7 @@
     mode="indeterminate"
   ></mat-progress-spinner>
 
-  <mat-card *ngIf="error && !loading" color="warn" class="error-card">
+  <mat-card *ngIf="error && !loading" class="error-card">
     <mat-card-content class="text-center">
       {{ error }}
     </mat-card-content>
@@ -19,10 +20,18 @@
       *ngFor="let t of trainings"
       class="training-card"
       (click)="goToDetails(t)"
+      appearance="outlined"
     >
       <mat-card-content class="card-content">
-        <div class="fecha">{{ t.fecha | date : "dd/MM/yyyy" }}</div>
-        <div class="musculo">{{ t.musculos[0].nombre }}</div>
+        <div class="fecha">
+          <strong>{{ t.fecha | date : "dd/MM/yyyy" }}</strong>
+        </div>
+
+        <div class="musculos-list">
+          <div *ngFor="let m of t.musculos" class="musculo-item">
+            <div class="musculo">{{ m.musculo.nombre }}</div>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

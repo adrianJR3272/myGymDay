@@ -10,7 +10,6 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
@@ -22,18 +21,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RecordTrainingService } from './record-training.service';
-import { AppService } from 'src/app/shared/app.service';
+import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { TrainingHeaderComponent } from '../training-header/training-header.component';
+import { RecordTrainingService } from './record-training.service';
 
 registerLocaleData(localeEs);
 
-// 📅 Definimos el formato personalizado YYYY-MM-DD
 export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'YYYY-MM-DD',
-  },
+  parse: { dateInput: 'YYYY-MM-DD' },
   display: {
     dateInput: 'yyyy-MM-dd',
     monthYearLabel: 'MMMM yyyy',
@@ -44,9 +40,9 @@ export const MY_DATE_FORMATS = {
 
 @Component({
   selector: 'app-record-training',
+  standalone: true,
   templateUrl: './record-training.component.html',
   styleUrls: ['./record-training.component.css'],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -67,29 +63,52 @@ export const MY_DATE_FORMATS = {
   ],
 })
 export class RecordTrainingComponent implements OnInit {
-  trainingForm!: FormGroup;
   private apiService = inject(RecordTrainingService);
   private router = inject(Router);
+  private fb = inject(FormBuilder);
+
+  trainingForm!: FormGroup;
 
   musculosDisponibles = [
     { id: 1, nombre: 'Pecho' },
     { id: 2, nombre: 'Espalda' },
     { id: 3, nombre: 'Piernas' },
-    { id: 4, nombre: 'Bíceps' },
-    { id: 5, nombre: 'Tríceps' },
-    { id: 6, nombre: 'Hombros' },
-    { id: 7, nombre: 'Antebrazos' },
-    { id: 8, nombre: 'Abdominales' },
-    { id: 9, nombre: 'Lumbares' },
+    { id: 4, nombre: 'Hombros' },
+    { id: 5, nombre: 'Abdominales' },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  ejerciciosPorMusculo: Record<string, string[]> = {
+    Pecho: [
+      'Press banca',
+      'Press inclinado',
+      'Press banca (máquina)',
+      'Press inclinado con mancuernas',
+      'Otros',
+    ],
+    Espalda: ['Jalón al pecho', 'Remo', 'Dominadas', 'Otros'],
+    Piernas: [
+      'Extensión de cuádriceps',
+      'Prensa',
+      'Sentadillas',
+      'Abductores',
+      'Hip thrust',
+      'Gemelos',
+      'Otros',
+    ],
+    Hombros: [
+      'Elevaciones laterales',
+      'Press militar con mancuernas',
+      'Press militar (máquina)',
+      'Otros',
+    ],
+    Abdominales: ['Crunch', 'Elevaciones de piernas', 'Plancha', 'Otros'],
+  };
 
   ngOnInit() {
     this.trainingForm = this.fb.group({
       fecha: [new Date(), Validators.required],
       musculos: this.fb.array(
-        [this.fb.control(null, Validators.required)],
+        [this.crearMusculoGroup()],
         [this.musculosUnicosValidator]
       ),
     });
@@ -99,8 +118,25 @@ export class RecordTrainingComponent implements OnInit {
     return this.trainingForm.get('musculos') as FormArray;
   }
 
+  crearMusculoGroup(): FormGroup {
+    return this.fb.group({
+      musculo: [null, Validators.required],
+      ejercicios: this.fb.array([]),
+    });
+  }
+
+  crearEjercicioGroup(): FormGroup {
+    return this.fb.group({
+      ejercicio: [null, Validators.required],
+    });
+  }
+
+  getEjercicios(i: number): FormArray {
+    return this.musculos.at(i).get('ejercicios') as FormArray;
+  }
+
   agregarMusculo() {
-    this.musculos.push(this.fb.control(null, Validators.required));
+    this.musculos.push(this.crearMusculoGroup());
   }
 
   eliminarMusculo(index: number) {
@@ -108,10 +144,28 @@ export class RecordTrainingComponent implements OnInit {
     this.musculos.updateValueAndValidity();
   }
 
+  agregarEjercicio(indexMusculo: number) {
+    const musculoGroup = this.musculos.at(indexMusculo) as FormGroup;
+    const ejerciciosArray = musculoGroup.get('ejercicios') as FormArray;
+    ejerciciosArray.push(this.crearEjercicioGroup());
+  }
+
+  eliminarEjercicio(indexMusculo: number, indexEjercicio: number) {
+    const musculoGroup = this.musculos.at(indexMusculo) as FormGroup;
+    const ejerciciosArray = musculoGroup.get('ejercicios') as FormArray;
+    ejerciciosArray.removeAt(indexEjercicio);
+  }
+
+  onMusculoSeleccionado(index: number) {
+    const musculoGroup = this.musculos.at(index) as FormGroup;
+    const ejerciciosArray = musculoGroup.get('ejercicios') as FormArray;
+    ejerciciosArray.clear();
+  }
+
   musculosUnicosValidator(control: AbstractControl): ValidationErrors | null {
     const musculos = (control as FormArray).value;
     if (!musculos || musculos.length === 0) return null;
-    const ids = musculos.filter((m: any) => m && m.id).map((m: any) => m.id);
+    const ids = musculos.map((m: any) => m?.musculo?.id).filter(Boolean);
     const idsUnicos = new Set(ids);
     return ids.length !== idsUnicos.size ? { musculosDuplicados: true } : null;
   }
@@ -122,11 +176,11 @@ export class RecordTrainingComponent implements OnInit {
         await this.apiService.guardarEntrenamiento(this.trainingForm.value);
         this.trainingForm.reset({
           fecha: new Date(),
-          musculos: [null],
+          musculos: [this.crearMusculoGroup()],
         });
         this.router.navigateByUrl('/home');
       } catch (error: any) {
-        return;
+        console.error(error);
       }
     } else {
       this.trainingForm.markAllAsTouched();

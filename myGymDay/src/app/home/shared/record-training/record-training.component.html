@@ -1,5 +1,18 @@
 <app-training-header></app-training-header>
+
 <div class="record-training">
+  <button mat-stroked-button type="button" (click)="agregarMusculo()">
+    <mat-icon>add</mat-icon> Añadir músculo
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="registerTraining()"
+  >
+    Registrar entrenamiento
+  </button>
+
   <form [formGroup]="trainingForm" (ngSubmit)="registerTraining()">
     <mat-form-field appearance="fill">
       <mat-label>Fecha de entrenamiento</mat-label>
@@ -16,41 +29,90 @@
     <div formArrayName="musculos">
       <div
         *ngFor="let musculo of musculos.controls; let i = index"
+        [formGroupName]="i"
         class="musculo-row"
       >
-        <mat-form-field appearance="fill" class="musculo-select">
-          <mat-label>Músculo {{ i + 1 }}</mat-label>
-          <mat-select [formControlName]="i">
-            <mat-option *ngFor="let m of musculosDisponibles" [value]="m">
-              {{ m.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="musculo-header">
+          <mat-form-field appearance="fill" class="musculo-select">
+            <mat-label>Músculo {{ i + 1 }}</mat-label>
+            <mat-select
+              formControlName="musculo"
+              (selectionChange)="onMusculoSeleccionado(i)"
+            >
+              <mat-option *ngFor="let m of musculosDisponibles" [value]="m">
+                {{ m.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <button
-          mat-icon-button
-          color="warn"
-          *ngIf="musculos.length > 1"
-          (click)="eliminarMusculo(i)"
-          type="button"
-          aria-label="Eliminar músculo"
-          class="delete-button"
+          <div class="musculo-buttons">
+            <button
+              mat-icon-button
+              color="primary"
+              type="button"
+              (click)="agregarEjercicio(i)"
+              aria-label="Añadir ejercicio"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+
+            <button
+              mat-icon-button
+              color="warn"
+              *ngIf="musculos.length > 1"
+              (click)="eliminarMusculo(i)"
+              type="button"
+              aria-label="Eliminar músculo"
+              class="delete-button"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div
+          formArrayName="ejercicios"
+          *ngIf="musculo.get('musculo')?.value"
+          class="ejercicios-wrapper"
         >
-          <mat-icon>delete</mat-icon>
-        </button>
+          <div
+            *ngFor="let ejercicio of getEjercicios(i).controls; let j = index"
+            [formGroupName]="j"
+            class="ejercicio-row"
+          >
+            <mat-form-field appearance="fill" class="ejercicio-select">
+              <mat-label>Ejercicio {{ j + 1 }}</mat-label>
+              <mat-select formControlName="ejercicio">
+                <mat-option
+                  *ngFor="
+                    let e of ejerciciosPorMusculo[
+                      musculo.get('musculo')?.value?.nombre
+                    ] || []
+                  "
+                  [value]="e"
+                >
+                  {{ e }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="eliminarEjercicio(i, j)"
+              aria-label="Eliminar ejercicio"
+              class="delete-button delete-button-ejercicio"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="error" *ngIf="musculos.errors?.['musculosDuplicados']">
         ⚠️ No puedes repetir el mismo músculo.
       </div>
     </div>
-
-    <button mat-button type="button" (click)="agregarMusculo()">
-      <mat-icon>add</mat-icon> Añadir músculo
-    </button>
-
-    <button mat-raised-button color="primary" type="submit">
-      Registrar entrenamiento
-    </button>
   </form>
 </div>

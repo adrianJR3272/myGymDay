@@ -2,31 +2,70 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-    justify-content: flex-start !important;
   gap: 16px;
 }
 
 .musculo-row {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.musculo-header {
+  display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .musculo-select {
   flex: 1;
 }
 
-.delete-button {
-  height: 48px; 
-  width: 48px;
+.ejercicios-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ejercicio-row {
   display: flex;
   align-items: center;
+  gap: 8px;
   justify-content: center;
-  margin-top: 4px; 
-  padding-bottom: 1.8rem;
-  color: #B80000
 }
 
-.error{
-    color: #B80000
+.ejercicio-select {
+  width: 85%;
+}
+
+.add-button {
+  align-self: center;
+}
+
+.delete-button {
+  color: #b80000;
+}
+
+.delete-button-ejercicio{
+    margin-bottom: 15px;
 
 }
+
+.error {
+  color: #b80000;
+  margin-top: 8px;
+}
+
+.musculo-buttons{
+  margin-bottom: 15px;
+}
+
+.ejercicio-row{
+  display: flex;
+  justify-content: center;
+  width: 300px;
+  padding-left: 2rem;
+
+}
+

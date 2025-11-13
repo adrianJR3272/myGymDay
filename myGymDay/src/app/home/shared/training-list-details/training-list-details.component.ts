@@ -12,7 +12,7 @@ import { TrainingHeaderComponent } from '../training-header/training-header.comp
 @Component({
   selector: 'app-training-list-details',
   templateUrl: './training-list-details.component.html',
-  styleUrls: ['./training-list-details.component.css'],
+  styleUrls: ['./training-list-details.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

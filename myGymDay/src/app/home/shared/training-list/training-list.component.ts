@@ -34,6 +34,7 @@ export class TrainingListComponent implements OnInit {
       next: (data) => {
         this.trainings = data;
         this.loading = false;
+        console.log(this.trainings);
       },
       error: (err) => {
         this.error = 'No se pudieron cargar los entrenamientos.';

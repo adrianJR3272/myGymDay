@@ -1,0 +1,60 @@
+.training-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.training-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+}
+
+.musculo-nombre-principal {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.musculo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.musculo-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.musculo-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.musculo-nombre {
+  flex-grow: 1;
+  margin-top: 0.2rem;
+}
+
+.no-training {
+  text-align: center;
+  margin-top: 2rem;
+  font-style: italic;
+  color: gray;
+}
+
+.ejercicio-line {
+  display: flex;
+  align-items: center;
+}
+
+.ejercicio-line span {
+  padding-left: 0.5rem;
+}
+
+.ejercicio-line mat-icon {
+  font-size: 1.5rem;
+  height: 1.9rem;
+  color: #1976d2;
+}
