@@ -25,6 +25,14 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'registros/:id',
+    loadComponent: () =>
+      import(
+        './home/shared/training-list-details/training-list-details.component'
+      ).then((m) => m.TrainingListDetailsComponent),
+  },
+
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',

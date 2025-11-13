@@ -1,0 +1,34 @@
+<div class="training-container" *ngIf="training; else noTraining">
+  <mat-card class="training-card">
+    <mat-card-header>
+      <mat-card-title>Detalle del Training</mat-card-title>
+      <mat-card-subtitle>{{
+        training.fecha | date : "medium"
+      }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <h3>Músculos trabajados:</h3>
+      <mat-divider></mat-divider>
+      <mat-list>
+        <mat-list-item
+          *ngFor="let musculo of training.musculos"
+          class="musculo-item"
+        >
+          <div class="musculo-line">
+            <mat-icon color="primary" class="musculo-icon"
+              >fitness_center</mat-icon
+            >
+            <span class="musculo-nombre">{{ musculo.nombre }}</span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-template #noTraining>
+  <div class="no-training">
+    <p>No se encontró el training.</p>
+  </div>
+</ng-template>

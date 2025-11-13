@@ -15,6 +15,7 @@ import { UserProfile } from './interfaces/user.interface';
   providedIn: 'root',
 })
 export class AppService {
+  userLogged: UserProfile | undefined;
   constructor(private auth: Auth, private firestore: Firestore) {}
 
   getUserProfile(): Observable<UserProfile | undefined> {
@@ -32,7 +33,7 @@ export class AppService {
                 sexo: data.sexo,
                 edad: this.calcularEdad(data.Edad),
               };
-
+              this.userLogged = profile;
               return of(profile);
             })
           );

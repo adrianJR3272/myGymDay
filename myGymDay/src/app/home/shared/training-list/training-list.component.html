@@ -1,3 +1,37 @@
-<p>
-  training-list works!
-</p>
+<div class="training-container">
+  <h2 class="mat-headline-5 mb-4 text-center">📅 Lista de entrenamientos</h2>
+
+  <mat-progress-spinner
+    *ngIf="loading"
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+
+  <mat-card *ngIf="error && !loading" color="warn" class="error-card">
+    <mat-card-content class="text-center">
+      {{ error }}
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="!loading && trainings.length > 0" class="training-grid">
+    <mat-card
+      *ngFor="let t of trainings"
+      class="training-card"
+      (click)="goToDetails(t)"
+    >
+      <mat-card-content class="card-content">
+        <div class="fecha">{{ t.fecha | date : "dd/MM/yyyy" }}</div>
+        <div class="musculo">{{ t.musculos[0].nombre }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card
+    *ngIf="!loading && !trainings.length && !error"
+    class="empty-card text-center"
+  >
+    <mat-card-content>
+      No hay entrenamientos registrados todavía 🏋️‍♂️
+    </mat-card-content>
+  </mat-card>
+</div>
