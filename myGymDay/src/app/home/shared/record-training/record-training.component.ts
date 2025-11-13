@@ -72,9 +72,11 @@ export class RecordTrainingComponent implements OnInit {
   musculosDisponibles = [
     { id: 1, nombre: 'Pecho' },
     { id: 2, nombre: 'Espalda' },
-    { id: 3, nombre: 'Piernas' },
-    { id: 4, nombre: 'Hombros' },
-    { id: 5, nombre: 'Abdominales' },
+    { id: 3, nombre: 'Biceps' },
+    { id: 4, nombre: 'Triceps' },
+    { id: 5, nombre: 'Piernas' },
+    { id: 6, nombre: 'Hombros' },
+    { id: 7, nombre: 'Abdominales' },
   ];
 
   ejerciciosPorMusculo: Record<string, string[]> = {
@@ -85,6 +87,8 @@ export class RecordTrainingComponent implements OnInit {
       'Press inclinado con mancuernas',
       'Otros',
     ],
+    Biceps: ['Curl Biceps', 'Martillo', 'Otros'],
+    Triceps: ['Polea', 'Polea unilateral', 'Otros'],
     Espalda: ['Jalón al pecho', 'Remo', 'Dominadas', 'Otros'],
     Piernas: [
       'Extensión de cuádriceps',

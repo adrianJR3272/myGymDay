@@ -49,8 +49,8 @@ export class RecordTrainingService {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 3000,
       panelClass: ['snackbar-success'],
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
+      horizontalPosition: 'start',
+      verticalPosition: 'bottom',
     });
   }
 
@@ -58,8 +58,8 @@ export class RecordTrainingService {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 5000,
       panelClass: ['snackbar-error'],
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
+      horizontalPosition: 'start',
+      verticalPosition: 'bottom',
     });
   }
 }
