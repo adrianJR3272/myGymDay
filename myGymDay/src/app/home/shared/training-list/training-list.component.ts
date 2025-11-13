@@ -6,6 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { Training } from 'src/app/shared/interfaces/training.interface';
+import { TrainingHeaderComponent } from '../training-header/training-header.component';
 @Component({
   selector: 'app-training-list',
   templateUrl: './training-list.component.html',
@@ -16,6 +17,7 @@ import { Training } from 'src/app/shared/interfaces/training.interface';
     MatCardModule,
     MatProgressSpinnerModule,
     MatButtonModule,
+    TrainingHeaderComponent,
   ],
 })
 export class TrainingListComponent implements OnInit {

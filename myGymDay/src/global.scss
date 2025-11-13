@@ -34,6 +34,11 @@ body {
   // Reset the user agent margin.
   margin: 0;
 }
+
+.ion-page {
+  justify-content: flex-start !important;
+}
+
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------

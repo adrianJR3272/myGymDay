@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { TrainingHeaderComponent } from '../training-header/training-header.component';
 
 @Component({
   selector: 'app-training-list-details',
@@ -19,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatListModule,
     MatDividerModule,
     MatIconModule,
+    TrainingHeaderComponent,
   ],
 })
 export class TrainingListDetailsComponent implements OnInit {

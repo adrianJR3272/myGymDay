@@ -1,5 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { Component, inject, OnInit, LOCALE_ID } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,7 +11,12 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import {
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +25,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { RecordTrainingService } from './record-training.service';
 import { AppService } from 'src/app/shared/app.service';
 import { Router } from '@angular/router';
+import { TrainingHeaderComponent } from '../training-header/training-header.component';
+
+registerLocaleData(localeEs);
+
+// 📅 Definimos el formato personalizado YYYY-MM-DD
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'yyyy-MM-dd',
+    monthYearLabel: 'MMMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM yyyy',
+  },
+};
 
 @Component({
   selector: 'app-record-training',
@@ -35,8 +57,14 @@ import { Router } from '@angular/router';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    TrainingHeaderComponent,
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: LOCALE_ID, useValue: 'es-ES' },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  ],
 })
 export class RecordTrainingComponent implements OnInit {
   trainingForm!: FormGroup;
@@ -55,10 +83,6 @@ export class RecordTrainingComponent implements OnInit {
     { id: 9, nombre: 'Lumbares' },
   ];
 
-  get musculos(): FormArray {
-    return this.trainingForm.get('musculos') as FormArray;
-  }
-
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -69,6 +93,10 @@ export class RecordTrainingComponent implements OnInit {
         [this.musculosUnicosValidator]
       ),
     });
+  }
+
+  get musculos(): FormArray {
+    return this.trainingForm.get('musculos') as FormArray;
   }
 
   agregarMusculo() {
@@ -82,25 +110,16 @@ export class RecordTrainingComponent implements OnInit {
 
   musculosUnicosValidator(control: AbstractControl): ValidationErrors | null {
     const musculos = (control as FormArray).value;
-
     if (!musculos || musculos.length === 0) return null;
-
     const ids = musculos.filter((m: any) => m && m.id).map((m: any) => m.id);
-
     const idsUnicos = new Set(ids);
-
-    if (ids.length !== idsUnicos.size) {
-      return { musculosDuplicados: true };
-    }
-
-    return null;
+    return ids.length !== idsUnicos.size ? { musculosDuplicados: true } : null;
   }
 
   async registerTraining() {
     if (this.trainingForm.valid) {
       try {
         await this.apiService.guardarEntrenamiento(this.trainingForm.value);
-
         this.trainingForm.reset({
           fecha: new Date(),
           musculos: [null],
@@ -111,10 +130,6 @@ export class RecordTrainingComponent implements OnInit {
       }
     } else {
       this.trainingForm.markAllAsTouched();
-
-      if (this.musculos.errors?.['musculosDuplicados']) {
-        return;
-      }
     }
   }
 }
